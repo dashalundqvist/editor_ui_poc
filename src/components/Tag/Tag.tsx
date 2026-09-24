@@ -1,3 +1,4 @@
+import { Icon } from '../Icon/Icon'
 import styles from './Tag.module.css'
 
 type TagProps = {
@@ -23,7 +24,7 @@ export function Tag({ label, color, objectName, removable = true, onRemove }: Ta
           aria-label={`Remove ${label} from ${objectName}`}
           onClick={onRemove}
         >
-          <span aria-hidden="true">×</span>
+          <Icon glyph="Remove" className={styles.icon} />
         </button>
       )}
     </div>

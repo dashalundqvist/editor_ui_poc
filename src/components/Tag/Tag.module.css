@@ -19,14 +19,15 @@
 /* Author data, not a token — tile colours are user data created in the Tiles
  * tab, and the design system must not define that palette. This is the one
  * intentional exception to "never a literal colour" in a component
- * stylesheet. The 1px white stroke at 25% is fixed so a very dark author
- * colour still reads against the dark pill. */
+ * stylesheet. The 1px inner stroke is a real token (not the hardcoded white
+ * 25% Figma shows) so it still reads against a very dark OR very pale author
+ * colour in both themes, not just dark mode. */
 .swatch {
   width: 10px;
   height: 10px;
   flex: none;
-  border-radius: 3px; /* MISSING TOKEN — no radius scale value matches 3px */
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 3px; /* MISSING TOKEN — Figma's own node is 3px; no radius scale value matches it */
+  border: 1px solid var(--border-strong);
   /* background-color is set inline per instance — see Tag.tsx. */
 }
 
@@ -38,13 +39,15 @@
   color: var(--foreground-secondary);
 }
 
-/* THE × IS ALWAYS VISIBLE — never hidden behind hover; 04 forbids hiding an
- * essential action that way. At 12px the glyph is smaller than a comfortable
- * target, so this is a real 24×24 hit area pulled back with negative margin:
- * it overlaps into the tag's own padding rather than growing the pill, and
- * stays flush with the tag's top/bottom edges. */
+/* THE REMOVE CONTROL IS ALWAYS VISIBLE — never hidden behind hover; 04
+ * forbids hiding an essential action that way. The glyph is a real Icon (SVG),
+ * not a text character: text sits on the font baseline and will not
+ * optically centre in a square box, which cost real time to debug once
+ * already. At 16px the glyph is smaller than a comfortable target, so this is
+ * a real 24×24 hit area pulled back with negative margin: it overlaps into
+ * the tag's own padding rather than growing the pill, and stays flush with
+ * the tag's top/bottom edges. */
 .remove {
-  composes: labelField from "../../styles/type.module.css";
   display: flex;
   align-items: center;
   justify-content: center;
@@ -61,6 +64,12 @@
 }
 .remove:hover {
   color: var(--foreground-primary);
+}
+
+.icon {
+  width: var(--size-icon);
+  height: var(--size-icon);
+  flex: none;
 }
 
 /* Focus is deliberately absent here — see tokens.css. The native <button>
