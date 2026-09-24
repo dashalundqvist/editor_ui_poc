@@ -1,0 +1,32 @@
+# Publishes Storybook to Chromatic on every push.
+#
+# Requires one repository secret: CHROMATIC_PROJECT_TOKEN
+# (GitHub → Settings → Secrets and variables → Actions → New repository secret)
+
+name: Chromatic
+
+on: push
+
+jobs:
+  chromatic:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Chromatic compares each build against its ancestors to decide what
+          # changed. A shallow clone has no ancestors, so every story would be
+          # reported as new on every push. This line is not optional.
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - uses: chromaui/action@latest
+        with:
+          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
+          # Only re-snapshot stories whose code actually changed.
+          onlyChanged: true
