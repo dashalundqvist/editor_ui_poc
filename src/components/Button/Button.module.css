@@ -1,0 +1,142 @@
+/* Button — the worked example of how a component binds to the system.
+ *
+ * Matches the Figma component set: Size (Prominent | Compact) × Tone (Primary |
+ * Neutral | Destructive) × State (Default | Hover | Disabled), plus the optional
+ * leading icon.
+ *
+ * Every value here is a token. If you find yourself typing a hex code or a pixel
+ * number in a component stylesheet, the system is missing something — add the token
+ * in Figma and regenerate, rather than hardcoding it here.
+ *
+ * Usage:
+ *   <button className={cx(s.button, s.prominent, s.primary)}>Add object</button>
+ */
+
+.button {
+  composes: labelControl from "../../styles/type.module.css";
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-base);
+
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+}
+
+/* --- Size ----------------------------------------------------------------
+ * Two only, both taken from the built product. A pill's horizontal padding is
+ * roughly half its height, or it stops reading as a pill.
+ * ---------------------------------------------------------------------- */
+
+.prominent {
+  height: var(--size-control-prominent);
+  padding-inline: var(--spacing-control-padding-xl);
+}
+
+/* Row actions and the project bar. This is WCAG 2.5.8's minimum target with no
+ * margin to spare, so keep at least var(--spacing-stack) between adjacent ones. */
+.compact {
+  height: var(--size-control-compact);
+  padding-inline: var(--spacing-control-padding-lg);
+}
+
+/* --- Tone ----------------------------------------------------------------
+ * Primary is the only filled tone, and it means this action commits work.
+ * One per view: two filled buttons on a screen means neither is the consequential one.
+ * ---------------------------------------------------------------------- */
+
+.primary {
+  background: var(--action-primary-default);
+  color: var(--foreground-on-action);
+  border-color: transparent;
+}
+.primary:hover:not(:disabled) {
+  background: var(--action-primary-hover);
+}
+.primary:active:not(:disabled) {
+  background: var(--action-primary-pressed);
+}
+.primary:disabled {
+  background: var(--action-primary-disabled);
+  color: var(--foreground-disabled);
+}
+
+.neutral {
+  background: var(--action-neutral-default);
+  color: var(--foreground-primary);
+  border-color: var(--border-control);
+}
+.neutral:hover:not(:disabled) {
+  background: var(--action-neutral-hover);
+  border-color: var(--border-strong);
+}
+.neutral:active:not(:disabled) {
+  background: var(--action-neutral-pressed);
+}
+.neutral:disabled {
+  background: var(--action-neutral-disabled);
+  border-color: var(--border-disabled);
+  color: var(--foreground-disabled);
+}
+
+/* Quiet by default — a danger label on a neutral surface — and it only warms on hover.
+ * Reserved for confirmation dialogs. A table row uses an icon button instead: a
+ * permanent red Delete on every row drowns the one row genuinely in trouble. */
+.destructive {
+  background: var(--action-neutral-default);
+  color: var(--action-danger-default);
+  border-color: var(--border-control);
+}
+.destructive:hover:not(:disabled) {
+  background: var(--action-danger-subtle);
+  color: var(--action-danger-hover);
+  border-color: var(--border-error);
+}
+.destructive:active:not(:disabled) {
+  color: var(--action-danger-pressed);
+}
+.destructive:disabled {
+  background: var(--action-neutral-disabled);
+  border-color: var(--border-disabled);
+  color: var(--foreground-disabled);
+}
+
+/* --- Leading icon --------------------------------------------------------
+ * Inherits the button's colour via currentColor, so it is correct in every tone
+ * and state without a rule per combination. The spinner in the Saving state uses
+ * this slot.
+ * ---------------------------------------------------------------------- */
+
+.icon {
+  width: var(--size-icon);
+  height: var(--size-icon);
+  flex: none;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* Figma cannot animate, so the spinner is drawn as eight radial ticks that rotate
+ * cleanly. This is the half of that state Figma could never show. */
+.spinner {
+  animation: spin 900ms linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spinner { animation: none; }
+}
+
+/* Focus is deliberately absent here. It is a system-wide ring defined once in
+ * tokens.css, which is why no component in the Figma file has a Focus variant.
+ * Do not add a per-component focus style — that is how focus treatment drifts. */

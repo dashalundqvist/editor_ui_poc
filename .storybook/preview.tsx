@@ -1,7 +1,12 @@
 import type { Preview } from '@storybook/react-vite'
+import '../src/styles/fonts.css'
+import '../src/styles/tokens.css'
 
 const preview: Preview = {
   parameters: {
+    // Stories render on tokens.css's var(--background-app), not Storybook's white default.
+    backgrounds: { disable: true },
+
     controls: {
       matchers: {
        color: /(background|color)$/i,

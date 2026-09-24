@@ -1,0 +1,31 @@
+/* Self-hosted typefaces. Not part of the Figma export — fonts are a code concern,
+ * imported once at the app root alongside tokens.css.
+ *
+ * Inter comes from the `inter-ui` package, which redistributes the official rsms/inter
+ * release verbatim (confirmed against the source repo, not the Google Fonts build).
+ * Verified with fontTools that its variable font's GSUB table includes ss02 — the
+ * Google Fonts build has historically shipped without it, which is why tokens.css's
+ * `font-feature-settings: "ss02" 1` would silently do nothing on that build.
+ *
+ * Geist Mono comes from Vercel's `geist` package. Its JS entrypoints are Next.js
+ * `next/font/local` wrappers and don't work outside Next, and its package.json
+ * "exports" map blocks importing the raw font file directly by path — so the
+ * variable woff2 is vendored into assets/fonts/ from the installed package
+ * (see package.json for the pinned "geist" version this was copied from).
+ */
+
+@font-face {
+  font-family: "Inter";
+  src: url("inter-ui/variable/InterVariable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Geist Mono";
+  src: url("../assets/fonts/GeistMono-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}

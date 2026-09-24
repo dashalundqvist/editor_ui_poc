@@ -1,0 +1,75 @@
+/* IconButton — a 24×24 circular action wrapping Icon.
+ *
+ * Matches the Figma component set (node 7:3350): Tone (Neutral | Destructive) ×
+ * State (Default | Hover | Disabled). Square by construction so radius/pill
+ * resolves to a circle. Meets WCAG 2.5.8 at exactly 24px with no margin to spare —
+ * keep at least var(--spacing-stack) between adjacent ones.
+ */
+
+.iconButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+
+  width: var(--size-control-compact);
+  height: var(--size-control-compact);
+
+  border: 1px solid transparent;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+}
+
+.iconButton:disabled {
+  cursor: not-allowed;
+}
+
+.neutral {
+  background: var(--action-neutral-default);
+  color: var(--foreground-primary);
+  border-color: var(--border-control);
+}
+.neutral:hover:not(:disabled) {
+  background: var(--action-neutral-hover);
+  border-color: var(--border-strong);
+}
+.neutral:active:not(:disabled) {
+  background: var(--action-neutral-pressed);
+}
+.neutral:disabled {
+  background: var(--action-neutral-disabled);
+  border-color: var(--border-disabled);
+  color: var(--foreground-disabled);
+}
+
+/* Icon-only means the accessible name must say what it acts on — see IconButton.tsx,
+ * which makes aria-label a required prop rather than trusting every call site. */
+.destructive {
+  background: var(--action-neutral-default);
+  color: var(--action-danger-default);
+  border-color: var(--border-control);
+}
+.destructive:hover:not(:disabled) {
+  background: var(--action-danger-subtle);
+  color: var(--action-danger-hover);
+  border-color: var(--border-error);
+}
+.destructive:active:not(:disabled) {
+  color: var(--action-danger-pressed);
+}
+.destructive:disabled {
+  background: var(--action-neutral-disabled);
+  border-color: var(--border-disabled);
+  color: var(--foreground-disabled);
+}
+
+.icon {
+  width: var(--size-icon);
+  height: var(--size-icon);
+  flex: none;
+  stroke: currentColor;
+  fill: none;
+}
+
+/* Focus is deliberately absent here — see tokens.css. Do not add a per-component
+ * focus style. */

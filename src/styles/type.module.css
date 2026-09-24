@@ -1,0 +1,156 @@
+/* Tellstory Editor type roles — the thirteen text styles from the Figma file,
+ * as composable CSS Modules classes.
+ *
+ * Depends on tokens.css being imported once at the app root.
+ *
+ * Use `composes` rather than importing this into a component:
+ *
+ *     .name {
+ *       composes: itemName from "../styles/type.module.css";
+ *       color: var(--foreground-primary);
+ *     }
+ *
+ * That keeps the role in the stylesheet where a reviewer can see it, instead of
+ * scattering `styles.itemName` through JSX where it reads as an arbitrary class.
+ *
+ * Class names are camelCase so they work whether or not your build sets
+ * localsConvention: "camelCaseOnly".
+ */
+
+/* The largest type in the editor. Dialog and modal titles. */
+.titleDialog {
+  font-family: var(--type-title-dialog-family);
+  font-size: var(--type-title-dialog-size);
+  line-height: var(--type-title-dialog-line-height);
+  font-weight: var(--type-title-dialog-weight);
+  letter-spacing: var(--type-title-dialog-letter-spacing);
+}
+
+/* Panel region titles and empty-state headings. */
+.titlePanel {
+  font-family: var(--type-title-panel-family);
+  font-size: var(--type-title-panel-size);
+  line-height: var(--type-title-panel-line-height);
+  font-weight: var(--type-title-panel-weight);
+  letter-spacing: var(--type-title-panel-letter-spacing);
+}
+
+/* The ONLY uppercase role. Short fixed labels above a group — never user content:
+ * uppercase destroys word-shape recognition and breaks with the long object names
+ * 02 says to expect. If you are reaching for this on a headline, use titlePanel. */
+.headingGroup {
+  font-family: var(--type-heading-group-family);
+  font-size: var(--type-heading-group-size);
+  line-height: var(--type-heading-group-line-height);
+  font-weight: var(--type-heading-group-weight);
+  letter-spacing: var(--type-heading-group-letter-spacing);
+  text-transform: uppercase;
+}
+
+/* Multi-line prose: dialog body, empty-state description, help text. */
+.bodyDefault {
+  font-family: var(--type-body-default-family);
+  font-size: var(--type-body-default-size);
+  line-height: var(--type-body-default-line-height);
+  font-weight: var(--type-body-default-weight);
+  letter-spacing: var(--type-body-default-letter-spacing);
+}
+
+/* Inline validation and status messages. 14px, not 12 — these are essential content,
+ * and 04 explicitly forbids shrinking them. */
+.bodyEmphasis {
+  font-family: var(--type-body-emphasis-family);
+  font-size: var(--type-body-emphasis-size);
+  line-height: var(--type-body-emphasis-line-height);
+  font-weight: var(--type-body-emphasis-weight);
+  letter-spacing: var(--type-body-emphasis-letter-spacing);
+}
+
+/* Object, tile and vector names in tables and breadcrumbs. */
+.itemName {
+  font-family: var(--type-item-name-family);
+  font-size: var(--type-item-name-size);
+  line-height: var(--type-item-name-line-height);
+  font-weight: var(--type-item-name-weight);
+  letter-spacing: var(--type-item-name-letter-spacing);
+}
+
+/* The selected item's name. The 400 → 600 shift is a non-colour selection cue:
+ * selection is carried by weight, indicator and surface together, never colour alone. */
+.itemNameSelected {
+  font-family: var(--type-item-name-selected-family);
+  font-size: var(--type-item-name-selected-size);
+  line-height: var(--type-item-name-selected-line-height);
+  font-weight: var(--type-item-name-selected-weight);
+  letter-spacing: var(--type-item-name-selected-letter-spacing);
+}
+
+/* Button labels, tabs, menu items, toolbar buttons. */
+.labelControl {
+  font-family: var(--type-label-control-family);
+  font-size: var(--type-label-control-size);
+  line-height: var(--type-label-control-line-height);
+  font-weight: var(--type-label-control-weight);
+  letter-spacing: var(--type-label-control-letter-spacing);
+}
+
+/* Column headers and property field labels. */
+.labelField {
+  font-family: var(--type-label-field-family);
+  font-size: var(--type-label-field-size);
+  line-height: var(--type-label-field-line-height);
+  font-weight: var(--type-label-field-weight);
+  letter-spacing: var(--type-label-field-letter-spacing);
+}
+
+/* Counts, timestamps, chips. NON-ESSENTIAL content only — 04 reserves 12px for things
+ * a user does not need to read to finish a task. If someone must read it, use bodyDefault. */
+.metadata {
+  font-family: var(--type-metadata-family);
+  font-size: var(--type-metadata-size);
+  line-height: var(--type-metadata-line-height);
+  font-weight: var(--type-metadata-weight);
+  letter-spacing: var(--type-metadata-letter-spacing);
+}
+
+/* Numeric property values — attention spans, coordinates, dimensions.
+ * Numbers ALWAYS use a mono role, even a single figure, so columns align and values
+ * do not jitter while being typed or dragged. */
+.monoValue {
+  font-family: var(--type-mono-value-family);
+  font-size: var(--type-mono-value-size);
+  line-height: var(--type-mono-value-line-height);
+  font-weight: var(--type-mono-value-weight);
+  letter-spacing: var(--type-mono-value-letter-spacing);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Technical identifiers, file references, export log lines. Secondary to human names. */
+.monoIdentifier {
+  font-family: var(--type-mono-identifier-family);
+  font-size: var(--type-mono-identifier-size);
+  line-height: var(--type-mono-identifier-line-height);
+  font-weight: var(--type-mono-identifier-weight);
+  letter-spacing: var(--type-mono-identifier-letter-spacing);
+  font-variant-numeric: tabular-nums;
+}
+
+/* Keyboard shortcut hints in menus and tooltips. */
+.monoShortcut {
+  font-family: var(--type-mono-shortcut-family);
+  font-size: var(--type-mono-shortcut-size);
+  line-height: var(--type-mono-shortcut-line-height);
+  font-weight: var(--type-mono-shortcut-weight);
+  letter-spacing: var(--type-mono-shortcut-letter-spacing);
+}
+
+/* One-line truncation, which every name in a table needs. 02 says to expect long
+ * names, and the Figma resilience test confirmed that wrapping grows the row and
+ * shifts the whole table. Pair with a title attribute or a focus reveal so the
+ * full value is still reachable. */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0; /* without this a flex child refuses to shrink and truncation never fires */
+}
