@@ -1,0 +1,21 @@
+/* TagOverflow — how many tags a row isn't showing. Matches the Figma
+ * "Tag overflow" component (node 10:6973). Neutral, never coloured: it's a
+ * count, not a tile.
+ */
+
+.tagOverflow {
+  composes: labelField from "../../styles/type.module.css";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  white-space: nowrap;
+
+  height: var(--size-control-compact);
+  padding-inline: var(--spacing-control-padding);
+
+  background: var(--action-neutral-default);
+  color: var(--foreground-secondary);
+  border: 1px solid var(--border-control);
+  border-radius: var(--radius-control);
+}

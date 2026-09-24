@@ -1,0 +1,68 @@
+/* Tag — a tile type an object references. Matches the Figma "Tag" component
+ * (node 7:2244): a neutral pill, a neutral label, and a 10px swatch carrying
+ * whatever colour the author chose. Colour never carries meaning alone — the
+ * label always names the tile type, so this works for a colour-blind author
+ * and for one who picks two similarly-hued tile types.
+ */
+
+.tag {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-base);
+  max-width: 180px;
+  overflow: hidden;
+  padding: var(--spacing-base) var(--spacing-inline);
+  border-radius: var(--radius-control);
+  background: var(--background-panel-subtle);
+}
+
+/* Author data, not a token — tile colours are user data created in the Tiles
+ * tab, and the design system must not define that palette. This is the one
+ * intentional exception to "never a literal colour" in a component
+ * stylesheet. The 1px white stroke at 25% is fixed so a very dark author
+ * colour still reads against the dark pill. */
+.swatch {
+  width: 10px;
+  height: 10px;
+  flex: none;
+  border-radius: 3px; /* MISSING TOKEN — no radius scale value matches 3px */
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  /* background-color is set inline per instance — see Tag.tsx. */
+}
+
+.label {
+  composes: metadata from "../../styles/type.module.css";
+  composes: truncate from "../../styles/type.module.css";
+  flex: 1 0 0;
+  min-width: 0;
+  color: var(--foreground-secondary);
+}
+
+/* THE × IS ALWAYS VISIBLE — never hidden behind hover; 04 forbids hiding an
+ * essential action that way. At 12px the glyph is smaller than a comfortable
+ * target, so this is a real 24×24 hit area pulled back with negative margin:
+ * it overlaps into the tag's own padding rather than growing the pill, and
+ * stays flush with the tag's top/bottom edges. */
+.remove {
+  composes: labelField from "../../styles/type.module.css";
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  margin: -4px -4px -4px 0;
+
+  color: var(--foreground-muted);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+.remove:hover {
+  color: var(--foreground-primary);
+}
+
+/* Focus is deliberately absent here — see tokens.css. The native <button>
+ * still gets the global :focus-visible ring; do not add a per-component focus
+ * style. */
