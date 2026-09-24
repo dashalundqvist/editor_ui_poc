@@ -1,0 +1,108 @@
+/* RangeField — the Attention control. Figures plus five quantised bands.
+ *
+ * Matches the Figma component set (node 7:2994): State (Read | Edit | Disabled) ×
+ * Value (Set | Not set). Fixed 112px total width in every state, so a table column
+ * does not change width when a cell enters edit.
+ *
+ * Two different kinds of "not a token" here — do not conflate them:
+ *
+ *   - width: 112px and the value column's 60px are deliberate component layout,
+ *     not a design-scale value. They exist so the column never reflows, per the
+ *     component's own Figma description. These stay literal.
+ *
+ *   - The band radius/width/height/gap below are a genuine missing-token gap,
+ *     not a layout decision — see the list handed back with this change. Do not
+ *     invent token names for these; they stay literal only until real tokens
+ *     exist in Figma.
+ */
+
+.rangeField {
+  display: flex;
+  align-items: center;
+  height: var(--size-control);
+  width: 112px; /* component layout, not a token — see header comment */
+}
+
+.display {
+  gap: var(--spacing-inline);
+}
+
+.value {
+  composes: monoValue from "../../styles/type.module.css";
+  width: 60px; /* component layout, not a token */
+  white-space: nowrap;
+}
+
+.valueSet {
+  color: var(--value-set);
+}
+
+.valueMuted {
+  color: var(--foreground-muted);
+}
+
+.valueDisabled {
+  color: var(--foreground-disabled);
+}
+
+.bands {
+  display: flex;
+  align-items: center;
+  gap: 3px; /* MISSING TOKEN — see header comment */
+  flex: none;
+}
+
+.band {
+  width: 6px; /* MISSING TOKEN */
+  height: 4px; /* MISSING TOKEN */
+  border-radius: 2px; /* MISSING TOKEN — between radius-none (0) and radius-control (4) */
+  background: var(--border-subtle);
+  flex: none;
+}
+
+.bandOn {
+  background: var(--foreground-action);
+}
+
+.bandOnDisabled {
+  background: var(--foreground-disabled);
+}
+
+.input {
+  composes: monoValue from "../../styles/type.module.css";
+  box-sizing: border-box;
+  width: 46px; /* not a token */
+  height: var(--size-control);
+  flex: none;
+  padding: 0;
+  text-align: center;
+
+  background: var(--background-input);
+  color: var(--value-set);
+  border: 1px solid var(--border-control);
+  border-radius: var(--radius-control);
+
+  /* Figma has no spinner affordance here and 46px has no room for one. */
+  -moz-appearance: textfield;
+}
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.input::placeholder {
+  color: var(--foreground-muted);
+}
+
+.separator {
+  composes: monoValue from "../../styles/type.module.css";
+  width: 12px; /* not a token */
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--foreground-muted);
+}
+
+/* Focus is deliberately absent here — see tokens.css. The native <input> still
+ * gets the global :focus-visible ring; do not add a per-component focus style. */
