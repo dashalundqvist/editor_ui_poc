@@ -13,6 +13,8 @@ type TagListProps = {
   tags: TagListItem[]
   objectName: string
   onRemove?: (index: number) => void
+  /** Mutes every tag and drops their remove controls — the Disabled row state. */
+  disabled?: boolean
 }
 
 function fitCount(widths: number[], gap: number, available: number): number {
@@ -60,7 +62,7 @@ function computeVisibleCount(
  * full list flashing before it collapses — because the fit is computed inside
  * a layout effect (which commits before the browser paints) from off-screen
  * measurement clones, not from the visible row itself. */
-export function TagList({ tags, objectName, onRemove }: TagListProps) {
+export function TagList({ tags, objectName, onRemove, disabled = false }: TagListProps) {
   const containerRef = useRef<HTMLDivElement>(null)
   const measureRef = useRef<HTMLDivElement>(null)
   const [visibleCount, setVisibleCount] = useState<number | null>(null)
@@ -91,7 +93,7 @@ export function TagList({ tags, objectName, onRemove }: TagListProps) {
     const observer = new ResizeObserver(recompute)
     observer.observe(container)
     return () => observer.disconnect()
-  }, [tags])
+  }, [tags, disabled])
 
   const measured = visibleCount !== null
   const shown = measured ? tags.slice(0, visibleCount) : []
@@ -101,15 +103,17 @@ export function TagList({ tags, objectName, onRemove }: TagListProps) {
     <div>
       <div ref={containerRef} className={styles.row}>
         {shown.map((tag, i) => (
-          <Tag
-            key={`${tag.label}-${i}`}
-            label={tag.label}
-            color={tag.color}
-            objectName={objectName}
-            onRemove={onRemove ? () => onRemove(i) : undefined}
-          />
+          <span key={`${tag.label}-${i}`} className={disabled ? styles.dimmed : undefined}>
+            <Tag
+              label={tag.label}
+              color={tag.color}
+              objectName={objectName}
+              removable={!disabled}
+              onRemove={onRemove && !disabled ? () => onRemove(i) : undefined}
+            />
+          </span>
         ))}
-        {hidden.length > 0 && <TagOverflow hiddenLabels={hidden.map((tag) => tag.label)} />}
+        {hidden.length > 0 && <TagOverflow hiddenLabels={hidden.map((tag) => tag.label)} disabled={disabled} />}
       </div>
 
       {/* Off-screen measurement clones — one per tag, plus one counter probe —
@@ -117,7 +121,7 @@ export function TagList({ tags, objectName, onRemove }: TagListProps) {
       <div ref={measureRef} className={styles.measure} aria-hidden="true">
         {tags.map((tag, i) => (
           <div key={`${tag.label}-${i}`} data-measure-tag className={styles.measureItem}>
-            <Tag label={tag.label} color={tag.color} objectName={objectName} />
+            <Tag label={tag.label} color={tag.color} objectName={objectName} removable={!disabled} />
           </div>
         ))}
         <div data-measure-counter className={tagOverflowStyles.tagOverflow} />

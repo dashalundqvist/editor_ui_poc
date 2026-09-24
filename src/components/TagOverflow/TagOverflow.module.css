@@ -19,3 +19,13 @@
   border: 1px solid var(--border-control);
   border-radius: var(--radius-control);
 }
+
+/* Disabled tokens, not opacity — a Disabled row's own Tag dimming (Figma's
+ * literal mechanism) measures fine with axe-core, but this pill's particular
+ * colours drop below WCAG AA contrast once opacity blends them against the
+ * page background. Same trio Button/IconButton already use for :disabled. */
+.disabled {
+  background: var(--action-neutral-disabled);
+  color: var(--foreground-disabled);
+  border-color: var(--border-disabled);
+}

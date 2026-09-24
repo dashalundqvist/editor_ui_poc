@@ -22,3 +22,7 @@
 .measureItem {
   display: inline-flex;
 }
+
+.dimmed {
+  opacity: 0.5;
+}

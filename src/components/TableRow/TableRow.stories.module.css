@@ -1,0 +1,11 @@
+.table {
+  width: 1140px;
+  max-width: 100%;
+  background: var(--background-app);
+}
+
+/* Storybook has no ":hover" control — this forces the hover visual so it can
+ * be reviewed and screenshotted without a real pointer. */
+.forceHover [class*='hoverable'] {
+  background: var(--background-hover) !important;
+}
