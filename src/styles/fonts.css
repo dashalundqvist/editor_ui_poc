@@ -12,11 +12,19 @@
  * "exports" map blocks importing the raw font file directly by path — so the
  * variable woff2 is vendored into assets/fonts/ from the installed package
  * (see package.json for the pinned "geist" version this was copied from).
+ *
+ * `?no-inline` on both: Vite's library build mode force-inlines every CSS
+ * asset as base64 regardless of size or assetsInlineLimit (the app build
+ * never would — these are both far over the default 4KB threshold anyway).
+ * Left alone, that balloons the published package's CSS to ~600KB and the
+ * consumer's bundler never gets a separate, cacheable font file to work
+ * with. This query suffix is Vite's own documented override, checked before
+ * the lib-mode force-inline rule.
  */
 
 @font-face {
   font-family: "Inter";
-  src: url("inter-ui/variable/InterVariable.woff2") format("woff2");
+  src: url("inter-ui/variable/InterVariable.woff2?no-inline") format("woff2");
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;
@@ -24,7 +32,7 @@
 
 @font-face {
   font-family: "Geist Mono";
-  src: url("../assets/fonts/GeistMono-Variable.woff2") format("woff2");
+  src: url("../assets/fonts/GeistMono-Variable.woff2?no-inline") format("woff2");
   font-weight: 100 900;
   font-style: normal;
   font-display: swap;

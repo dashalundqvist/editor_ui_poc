@@ -1,11 +1,31 @@
 {
   "name": "editor_ui_poc",
-  "private": true,
   "version": "0.0.0",
   "type": "module",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    },
+    "./style.css": "./dist/index.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "peerDependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:lib": "vite build --config vite.lib.config.ts",
     "lint": "oxlint",
     "preview": "vite preview",
     "storybook": "storybook dev -p 6006",
@@ -13,11 +33,11 @@
   },
   "dependencies": {
     "geist": "^1.7.2",
-    "inter-ui": "^4.1.1",
-    "react": "^19.2.8",
-    "react-dom": "^19.2.8"
+    "inter-ui": "^4.1.1"
   },
   "devDependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
     "@chromatic-com/storybook": "latest",
     "@storybook/addon-a11y": "^10.6.0",
     "@storybook/addon-docs": "^10.6.0",
@@ -36,6 +56,7 @@
     "storybook": "^10.6.0",
     "typescript": "~6.0.2",
     "vite": "^8.3.0",
+    "vite-plugin-dts": "^5.1.1",
     "vitest": "latest"
   }
 }

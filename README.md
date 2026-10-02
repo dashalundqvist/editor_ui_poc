@@ -1,32 +1,36 @@
-# React + TypeScript + Vite
+# Tellstory Editor — component library
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+React implementation of the Tellstory Editor design system. See `CLAUDE.md`
+for the binding contract between the Figma file and this code.
 
-Currently, two official plugins are available:
+## Using the components
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+```sh
+npm install editor_ui_poc
+```
 
-## React Compiler
+```tsx
+import { Button, Tag, TagList } from 'editor_ui_poc'
+import 'editor_ui_poc/style.css' // once, at your app root — tokens, fonts, and every component's styles
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
+function Example() {
+  return <Button tone="primary">Add object</Button>
 }
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+`react` and `react-dom` (^19) are peer dependencies — install them yourself if
+your app doesn't already have them. `editor_ui_poc/style.css` self-hosts
+Inter and Geist Mono as separate font files alongside the CSS; your own
+bundler will pick them up from the relative `url()` references the same way
+it handles any other imported stylesheet.
+
+Browse every component and state in Storybook — `npm run storybook` in this
+repo, or the published Chromatic build.
+
+## Developing this repo
+
+- `npm run dev` — the (minimal) demo app
+- `npm run storybook` — the component catalog, with a11y checks via the addon
+- `npm run build:lib` — builds the publishable package into `dist/`
+- `npm run build` — builds the demo app (not the library)
+- `npm run lint` — Oxlint
