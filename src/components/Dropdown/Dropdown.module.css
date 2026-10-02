@@ -1,0 +1,118 @@
+/* Dropdown — single choice from a fixed list, for a table cell. Matches
+ * Figma's "Dropdown" component (node 20:3315). Same contract as TextField:
+ * every state is 32px tall, so Read and Edit never change the row height.
+ */
+
+.wrapper {
+  position: relative;
+}
+
+.read,
+.disabled {
+  composes: itemName from "../../styles/type.module.css";
+  composes: truncate from "../../styles/type.module.css";
+  display: block;
+  height: var(--size-control);
+  line-height: var(--size-control);
+}
+
+.read {
+  color: var(--foreground-primary);
+}
+
+.disabled {
+  color: var(--foreground-disabled);
+}
+
+.box {
+  box-sizing: border-box; /* height:32px must INCLUDE the border, or edit mode is 2px taller than read */
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-base);
+  height: var(--size-control);
+  padding-inline: var(--spacing-control-padding);
+  background: var(--background-input);
+  border: 1px solid var(--border-control);
+  border-radius: var(--radius-control);
+}
+
+.error {
+  border-color: var(--border-error);
+}
+
+.trigger {
+  composes: itemName from "../../styles/type.module.css";
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-base);
+  flex: 1 0 0;
+  min-width: 0;
+  height: 100%;
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--foreground-primary);
+  cursor: pointer;
+}
+
+.value {
+  composes: truncate from "../../styles/type.module.css";
+  flex: 1 0 0;
+  min-width: 0;
+  text-align: left;
+}
+
+.chevron {
+  width: var(--size-icon);
+  height: var(--size-icon);
+  flex: none;
+  color: var(--foreground-muted);
+}
+
+/* The field-error mark — a real <button>, reachable by keyboard (decision 25). */
+.explain {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  color: var(--foreground-muted);
+  background: none;
+  border: none;
+  padding: 0;
+  border-radius: var(--radius-control);
+  cursor: pointer;
+}
+.explain:hover {
+  color: var(--foreground-primary);
+}
+
+.explainIcon {
+  width: var(--size-icon);
+  height: var(--size-icon);
+  flex: none;
+}
+
+/* MISSING TOKEN — Figma's Open state uses effect style "elevation/overlay-dark"
+ * (two stacked drop shadows: 0 2px 6px rgba(0,0,0,.45), 0 20px 40px
+ * rgba(0,0,0,.6)), which has no equivalent in tokens.css — there are no
+ * shadow/elevation tokens at all yet. Flagged, not hardcoded: the menu below
+ * renders without a shadow until this token exists. */
+.menu {
+  position: absolute;
+  top: calc(100% + var(--spacing-base));
+  left: -1px;
+  width: 100%;
+  margin: 0;
+  padding-block: var(--spacing-base);
+  list-style: none;
+  background: var(--background-elevated);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-container);
+  z-index: 1;
+}
+
+/* Focus is deliberately absent here — see tokens.css. The trigger <button>
+ * still gets the global :focus-visible ring; do not add a per-component
+ * focus style. */

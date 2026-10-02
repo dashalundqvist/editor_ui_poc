@@ -318,6 +318,25 @@
 }
 
 /* ---------------------------------------------------------------------------
+ * Table — density mode. New Figma collection "Tellstory Table" (modes
+ * Comfortable / Compact), decision 37. Row height is DERIVED (cell padding +
+ * the 32px control height), never a token itself: 49px Comfortable, 41px
+ * Compact, both including the row's own 1px bottom border. Column widths and
+ * the cell gap do not change between modes — only cell-padding-y does.
+ * Comfortable is the default; set data-density="compact" on a table to
+ * switch, same pattern as [data-theme="light"] above.
+ * ------------------------------------------------------------------------ */
+:root {
+  --table-cell-padding-y: var(--spacing-control-padding); /* 8px */
+  --table-cell-padding-x: var(--spacing-panel-padding);   /* 24px */
+  --table-cell-gap: var(--spacing-group);                 /* 16px */
+}
+
+[data-density="compact"] {
+  --table-cell-padding-y: var(--spacing-base); /* 4px */
+}
+
+/* ---------------------------------------------------------------------------
  * Type — atomic tokens. The composable roles are in type.module.css.
  * ------------------------------------------------------------------------ */
 :root {

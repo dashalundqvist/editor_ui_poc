@@ -1,0 +1,91 @@
+/* TextField — single-line text value for a table cell. Matches Figma's
+ * "Text field" component (node 20:2978). Read is plain text at control
+ * height (32px) — the same height as Edit, so a row never changes height
+ * when it enters Edit (decisions 36/37).
+ */
+
+.read,
+.disabled {
+  composes: itemName from "../../styles/type.module.css";
+  composes: truncate from "../../styles/type.module.css";
+  display: block;
+  height: var(--size-control);
+  line-height: var(--size-control);
+}
+
+.read {
+  color: var(--foreground-primary);
+}
+
+/* The one case a generic text atom is allowed to know about: the row's own
+ * Selected state promotes its Read text to the selected role. Category (a
+ * Dropdown, not a TextField) never gets this treatment — selection marks the
+ * row's primary identity value, not every field in it. */
+.selected {
+  composes: itemNameSelected from "../../styles/type.module.css";
+  color: var(--selection-foreground);
+}
+
+.disabled {
+  color: var(--foreground-disabled);
+}
+
+.edit {
+  composes: itemName from "../../styles/type.module.css";
+  box-sizing: border-box; /* height:32px must INCLUDE the border, or edit mode is 2px taller than read */
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-base);
+  height: var(--size-control);
+  padding-inline: var(--spacing-control-padding);
+  background: var(--background-input);
+  color: var(--foreground-primary);
+  border: 1px solid var(--border-control);
+  border-radius: var(--radius-control);
+}
+
+.error {
+  border-color: var(--border-error);
+}
+
+.input {
+  flex: 1 0 0;
+  min-width: 0;
+  background: none;
+  border: none;
+  outline: none;
+  padding: 0;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+/* The field-error mark — a real <button>, reachable by keyboard, not a
+ * hover-only affordance (decision 25). */
+.explain {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  width: 24px;
+  height: 24px;
+  color: var(--foreground-muted);
+  background: none;
+  border: none;
+  padding: 0;
+  border-radius: var(--radius-control);
+  cursor: pointer;
+}
+.explain:hover {
+  color: var(--foreground-primary);
+}
+
+.explainIcon {
+  width: var(--size-icon);
+  height: var(--size-icon);
+  flex: none;
+}
+
+/* Focus is deliberately absent here — see tokens.css. The native <input> and
+ * <button> still get the global :focus-visible ring; do not add a
+ * per-component focus style. */

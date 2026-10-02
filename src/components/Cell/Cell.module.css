@@ -1,0 +1,16 @@
+/* Cell — one generic table cell (Figma node 20:2987). Owns only alignment,
+ * vertical centring and clipping. Width is the column's — set per instance,
+ * the same for every row and the header; padding and gaps belong to the row
+ * (table/* tokens), not here. Decision 36.
+ */
+
+.cell {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  min-width: 0; /* without this a flex child refuses to shrink and truncation never fires */
+}
+
+.alignEnd {
+  justify-content: flex-end;
+}

@@ -1,23 +1,25 @@
-/* TableRow — a row in the Tiles, Vectors or Objects table. Matches the Figma
- * "Table row" component set (node 7:2366): columns, widths and geometry taken
- * directly from it. Every state is 48px content + this row's own 1px bottom
- * border = 49px total — nothing here grows, so nothing below a row ever
- * moves when its state changes.
+/* TableRow — a table row shell (decisions 36–37). Owns row state, the status
+ * indicator, the action group, and the row's padding/gap via the
+ * `Tellstory Table` density tokens. Takes its columns as children (Cell
+ * instances) — it knows nothing about what those columns ARE.
  *
- * No wrapping <table>/<tr>/<td> yet — the Objects tab screen that would
- * establish real table/row/cell semantics top-down is explicitly out of
- * scope here. This is a styled <div> matching Figma's own (also non-semantic)
- * frame structure. Revisit when that screen exists: either promote this to
- * real <tr>/<td> inside a <table>, or add role="row" once there's a
- * role="table" ancestor to belong to — role="row" on its own, with no table
- * ancestor, would be worse than no role at all.
+ * Row height is DELIBERATELY not set anywhere here. It's derived from
+ * --table-cell-padding-y (8px Comfortable / 4px Compact) plus the 32px-tall
+ * control content: 8+32+8=48 / 4+32+4=40, +1px border = 49 / 41. Setting an
+ * explicit height would be the exact "fixed number" decision 37 replaced with
+ * a rule — content may make a row taller (it still can here), state may not.
+ *
+ * No wrapping <table>/<tr>/<td> or ARIA row/cell roles yet — that belongs to
+ * whatever eventually composes many of these into a real table, which is out
+ * of scope here. role="row" with no role="table" ancestor would be worse
+ * than no role at all.
  */
 
 .row {
   border-bottom: 1px solid var(--border-subtle);
 }
 
-/* Hover is a real pointer state, not a prop — only applied to the plain
+/* Hover is a real pointer state, not a prop — only meaningful on the plain
  * read-only row (Default/Invalid). Selected, Disabled and every edit-mode
  * state have their own final appearance and don't additionally react to
  * hover, matching how Figma never defines a combined "Selected + Hover" etc. */
@@ -29,8 +31,9 @@
   background: var(--background-panel);
 }
 .surfaceSelected {
-  /* One of Selected's three channels — see .nameSelected for the weight
-   * shift and .indicatorSelected for the third. Never colour alone. */
+  /* One of Selected's three channels — see TextField's .selected for the
+   * weight shift and .indicatorSelected below for the third. Never colour
+   * alone. */
   background: var(--selection-background);
 }
 .surfaceSubtle {
@@ -40,7 +43,6 @@
 .content {
   display: flex;
   align-items: stretch;
-  height: 48px;
 }
 
 .indicator {
@@ -56,7 +58,7 @@
 }
 .indicatorSaveFailed {
   /* A distinct token from --border-error, same value today but a different
-   * meaning ("this row's save failed" vs. "this value is invalid") — see
+   * meaning ("this row's save failed" vs "this value is invalid") — see
    * tokens.css's own note about not merging same-value, different-purpose
    * tokens. */
   background: var(--status-save-failed);
@@ -67,167 +69,22 @@
   align-items: center;
   flex: 1 0 0;
   min-width: 0;
-  gap: var(--spacing-group);
-  padding: var(--spacing-inline) var(--spacing-panel-padding);
+  gap: var(--table-cell-gap);
+  padding: var(--table-cell-padding-y) var(--table-cell-padding-x);
 }
 
-/* --- Read-mode text columns ------------------------------------------- */
-
-.name {
-  composes: itemName from "../../styles/type.module.css";
-  composes: truncate from "../../styles/type.module.css";
-  width: 240px;
-  flex: none;
-  color: var(--foreground-primary);
-}
-.nameSelected {
-  composes: itemNameSelected from "../../styles/type.module.css";
-  composes: truncate from "../../styles/type.module.css";
-  width: 240px;
-  flex: none;
-  color: var(--selection-foreground);
-}
-.nameDisabled {
-  color: var(--foreground-disabled);
-}
-
-.category {
-  composes: bodyDefault from "../../styles/type.module.css";
-  composes: truncate from "../../styles/type.module.css";
-  width: 180px;
-  flex: none;
-  color: var(--foreground-secondary);
-}
-.categoryDisabled {
-  color: var(--foreground-disabled);
-}
-
-/* --- Shared column wrappers --------------------------------------------- */
-
-.attention {
-  width: 120px;
-  flex: none;
+.cellsSlot {
   display: flex;
   align-items: center;
-}
-
-.tagsCell {
   flex: 1 0 0;
   min-width: 0;
-  display: flex;
-  align-items: center;
-}
-
-.tagsEditRow {
-  flex: 1 0 0;
-  min-width: 0;
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-base);
-}
-
-.meta {
-  width: 100px;
-  flex: none;
-  display: flex;
-  align-items: center;
+  gap: var(--table-cell-gap);
 }
 
 .actions {
-  width: 148px;
   flex: none;
   display: flex;
   align-items: center;
   justify-content: flex-end;
   gap: var(--spacing-stack);
 }
-
-/* --- Edit-mode inputs ---------------------------------------------------- */
-
-.input {
-  composes: itemName from "../../styles/type.module.css";
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-base);
-  width: 240px;
-  height: var(--size-control);
-  flex: none;
-  padding-inline: var(--spacing-control-padding);
-  background: var(--background-input);
-  color: var(--foreground-primary);
-  border: 1px solid var(--border-control);
-  border-radius: var(--radius-control);
-}
-
-/* Category's dropdown behaviour isn't designed yet — Figma shows only the
- * closed, static appearance (text + chevron), with no options list defined
- * anywhere. This is a real text input for now, not a working select; the
- * chevron is decorative. Revisit once the picker itself is designed. */
-.categoryInput {
-  composes: labelControl from "../../styles/type.module.css";
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-base);
-  width: 180px;
-  height: var(--size-control);
-  flex: none;
-  padding-inline: var(--spacing-control-padding);
-  background: var(--background-input);
-  color: var(--foreground-primary);
-  border: 1px solid var(--border-control);
-  border-radius: var(--radius-control);
-}
-
-.inputError {
-  border-color: var(--border-error);
-}
-
-.inputField {
-  flex: 1 0 0;
-  min-width: 0;
-  background: none;
-  border: none;
-  outline: none;
-  padding: 0;
-  color: inherit;
-  font: inherit;
-  letter-spacing: inherit;
-}
-
-.chevron {
-  composes: metadata from "../../styles/type.module.css";
-  width: 12px;
-  flex: none;
-  text-align: center;
-  color: var(--foreground-muted);
-}
-
-/* The Field-error info mark — a real <button>, reachable by keyboard, not a
- * hover-only affordance. */
-.explain {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex: none;
-  width: 24px;
-  height: 24px;
-  color: var(--foreground-muted);
-  background: none;
-  border: none;
-  padding: 0;
-  border-radius: var(--radius-control);
-  cursor: pointer;
-}
-.explain:hover {
-  color: var(--foreground-primary);
-}
-
-.explainIcon {
-  width: var(--size-icon);
-  height: var(--size-icon);
-  flex: none;
-}
-
-/* Focus is deliberately absent here — see tokens.css. Native <input> and
- * <button> elements still get the global :focus-visible ring; do not add a
- * per-component focus style. */

@@ -1,0 +1,11 @@
+/* ObjectsRow — the Objects table's row, composed from the generic TableRow +
+ * Cell + atoms. Objects-specific knowledge (column widths, which field is
+ * Name vs Category, "Add tag"/"Add meta") lives here, never on TableRow
+ * itself (decision 36).
+ */
+
+.tagsEdit {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-base);
+}

@@ -1,0 +1,51 @@
+/* MenuItem — one row in an overlay menu. Matches Figma's "Menu item"
+ * component set (node 8:4065). size/control (32px) tall: a menu item is a
+ * large, forgiving target by convention, no density argument for shrinking it.
+ */
+
+.item {
+  composes: labelControl from "../../styles/type.module.css";
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-inline);
+  height: var(--size-control);
+  padding-inline: var(--spacing-group);
+  color: var(--foreground-primary);
+  cursor: pointer;
+}
+
+/* Keyboard "virtual focus" (aria-activedescendant) and real pointer hover
+ * share this treatment — actual DOM focus never moves off the trigger button
+ * in this listbox pattern, so there is no separate focus style to add
+ * (decision 29 still holds: no per-component focus style). */
+.item:hover,
+.highlighted {
+  background: var(--background-hover);
+}
+
+/* The current value in a choice list. Confirm check plus Semi Bold label —
+ * never colour alone (decision 38). */
+.selected {
+  composes: itemNameSelected from "../../styles/type.module.css";
+  color: var(--foreground-primary);
+}
+
+.label {
+  flex: 1 0 0;
+  min-width: 0;
+  composes: truncate from "../../styles/type.module.css";
+}
+
+.check {
+  width: var(--size-icon);
+  height: var(--size-icon);
+  flex: none;
+}
+
+.disabled {
+  color: var(--foreground-disabled);
+  cursor: not-allowed;
+}
+.disabled:hover {
+  background: none;
+}
