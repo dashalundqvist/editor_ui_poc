@@ -1,0 +1,47 @@
+# Publishes the component library to GitHub Packages on every push to main.
+#
+# git push → build:lib → npm publish → GitHub Package Registry
+#
+# No secret to configure: GITHUB_TOKEN is provided automatically by Actions
+# and is granted "packages: write" below, which is sufficient to publish to
+# this repo's own package scope on npm.pkg.github.com.
+#
+# Versioning: every push publishes a new 0.0.0-<short-sha> prerelease rather
+# than reusing package.json's own version — npm refuses to publish a version
+# that already exists, and this repo doesn't yet have a release/tagging
+# process that would bump it manually. This keeps every push installable
+# without committing a version bump back to the branch. Switch to real
+# semantic versions (manual `npm version` + publishing only on tags) once
+# there's an actual release process.
+
+name: Publish to GitHub Packages
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          registry-url: https://npm.pkg.github.com
+          scope: '@dashalundqvist'
+
+      - run: npm ci
+
+      - run: npm run build:lib
+
+      - run: npm version "0.0.0-${GITHUB_SHA::7}" --no-git-tag-version
+
+      - run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
